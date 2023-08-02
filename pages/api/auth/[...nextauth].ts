@@ -3,9 +3,22 @@ import Credentials from 'next-auth/providers/credentials';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { compare } from 'bcrypt';
 import prismadb from '@/lib/prismadb';
+import GithubProvider from 'next-auth/providers/github'
+import GoogleProvider from 'next-auth/providers/google'
+
 
 export const authOptions: AuthOptions = {
   providers: [
+    GithubProvider({
+      clientId: process.env.GITHUB_ID || '',
+      clientSecret: process.env.GITHUB_SECRET || ''
+    }),
+
+    GoogleProvider({
+      clientId:process.env.GOOGLE_CLIENT_ID || '',
+      clientSecret:process.env.GOOGLE_CLIENT_SECRET || ''
+    }),
+    
     Credentials({
       id: 'credentials',
       name: 'Credentials',
@@ -19,6 +32,7 @@ export const authOptions: AuthOptions = {
           type: 'passord'
         }
       },
+
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
           throw new Error('Email and password required');
@@ -35,7 +49,7 @@ export const authOptions: AuthOptions = {
         const isCorrectPassword = await compare(credentials.password, user.hashedPassword);
 
         if (!isCorrectPassword) {
-          throw new Error('Incorrect Email or password.');
+          throw new Error('Incorrect Email or Password.');
         }
 
         return user;
