@@ -1,9 +1,12 @@
 import Image from 'next/image'
-import Input from '@/components/input'
+import Input from '@/components/Input'
 import { useCallback, useState } from 'react'
-import { log } from 'console'
-
+import axios from 'axios'
+import { useRouter } from 'next/router';
+import { signIn } from 'next-auth/react';
 const Auth = () => {
+    const router = useRouter();
+    const [errMsg,setErrMsg] = useState('')
     const [email, setEmail] = useState('')
     const [name, setName] = useState('')
     const [lastName, setLastName] = useState('')
@@ -14,13 +17,50 @@ const Auth = () => {
 
     const toggleVariant = useCallback(() => {
         setVariant((currentVariant) => {
+            setErrMsg('')
             return currentVariant === 'login' ? 'register' : 'login';
         })
-
-
-    
-
     }, [])
+
+    const login = useCallback(async () =>{
+        try{
+        const resp = await signIn('credentials', {
+            email:email,
+            password:password,
+            redirect: false,
+            callbackUrl: '/'
+          });
+
+        
+        if (resp?.status == 200)
+            router.push('/')
+        else setErrMsg(resp?.error || '')
+
+        
+
+
+        }catch(error){
+            console.log(error);
+        }
+
+    },[email,password,router])
+
+    const register = useCallback(async ()=>{
+        let response
+        try{
+            const resp = await axios.post('/api/register',{
+                name,
+                lastName,
+                email,
+                password,
+            })
+            login()
+        }catch(error){
+            setErrMsg(error?.response?.data?.error || '')
+        }
+    },[email,name,lastName,password,login])
+
+
     return (
         <div className="relative h-full bg-no-repeat bg-center bg-cover w-full bg-[url('/images/hero.jpg')]">
             <div className="bg-black w-full h-full lg:bg-opacity-50 bg-opacity-25">
@@ -83,18 +123,23 @@ const Auth = () => {
                                 type='password' />
 
                         </div>
+                        <div className='flex justify-center text-center text-red-700 mt-4'>
+                            <span>{errMsg}</span>
+                        </div>
+
                         <button className='
                         bg-purple-700
                         py-3
                         text-white
                         rounded-md
                         w-full
-                        mt-10
+                        mt-3
                         hover:bg-purple-900
                         transition
                         duration-300
                         font-semibold
-                        '>
+                        '
+                        onClick={variant === 'login' ? login : register}>
                             {variant === 'login' ?
                                 'Login' : 'Sign up'}
                         </button>
