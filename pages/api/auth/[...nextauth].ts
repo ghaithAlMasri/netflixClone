@@ -5,7 +5,7 @@ import { compare } from 'bcrypt';
 import prismadb from '@/lib/prismadb';
 import GithubProvider from 'next-auth/providers/github'
 import GoogleProvider from 'next-auth/providers/google'
-
+import { NextApiResponse } from 'next';
 
 export const authOptions: AuthOptions = {
   providers: [
@@ -29,7 +29,7 @@ export const authOptions: AuthOptions = {
         },
         password: {
           label: 'Password',
-          type: 'passord'
+          type: 'password'
         }
       },
 
@@ -52,7 +52,7 @@ export const authOptions: AuthOptions = {
           throw new Error('Incorrect Email or Password.');
         }
 
-        return user;
+        return user
       }
     })
   ],
