@@ -41,6 +41,7 @@ const Auth = () => {
 
             setIsLoading(false)
 
+            
             if (resp?.status == 200)
                 router.push('/')
             else setErrMsg(resp?.error || '')
@@ -151,7 +152,8 @@ const Auth = () => {
                             onClick={()=>{
                                 setIsLoading(true)
                                 signIn('google',{callbackUrl:'/'})
-                                setIsLoading(false)}}
+                                setIsLoading(false)
+                            }}
 
                             className='flex justify-center text-center 
                             items-center bg-white rounded-full w-10 h-10 text-3xl cursor-pointer  hover:opacity-50 transition duration-300'>
