@@ -18,7 +18,7 @@ export const authOptions: AuthOptions = {
       clientId:process.env.GOOGLE_CLIENT_ID || '',
       clientSecret:process.env.GOOGLE_CLIENT_SECRET || ''
     }),
-    
+
     Credentials({
       id: 'credentials',
       name: 'Credentials',
@@ -59,8 +59,8 @@ export const authOptions: AuthOptions = {
   pages: {
     signIn: '/auth'
   },
-  debug: process.env.NODE_ENV === 'development',
   adapter: PrismaAdapter(prismadb),
+  debug: process.env.NODE_ENV === 'development',
   session: { strategy: 'jwt' },
   jwt: {
     secret: process.env.NEXTAUTH_JWT_SECRET,
