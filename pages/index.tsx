@@ -1,32 +1,36 @@
+import useCurrentUser from '@/hooks/useCurrentUser'
 import { NextPageContext } from 'next'
-import {signOut, getSession} from 'next-auth/react'
+import {getSession, signOut} from 'next-auth/react'
 
-export async function getServerSideProps(context:NextPageContext){
 
-  const session = await getSession(context)
+export async function getServerSideProps(context: NextPageContext) {
+  const session = await getSession(context);
 
-  if(!session){
-    return{
-      redirect:{
+  if (!session) {
+    return {
+      redirect: {
         destination: '/auth',
-        permanent: false
+        permanent: false,
       }
-
     }
   }
 
-  return{
+  return {
     props: {}
   }
-  
 }
 
+
 export default function Home() {
+
+  const { data:user } = useCurrentUser()
+
+  
   return (
    <>
    <h1 className="text-2xl text-red-500">NETFLIX CLONE</h1>
-
-   <button onClick={()=>{signOut()}} className='h-10  mt-20 w-full bg-white'>Logout</button>
+   <p className='text-white'>Logged in as: {user?.name || ''}</p>
+   <button className='h-10 w-full bg-white mt-20' onClick={()=>{signOut()}}>Logout</button>
    </>
   )
 }

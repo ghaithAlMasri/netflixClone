@@ -81,7 +81,7 @@ const Auth = () => {
         <div className="relative h-full bg-no-repeat bg-center bg-cover w-full bg-[url('/images/hero.jpg')] overflow-hidden">
             <div className="bg-black w-full h-full lg:bg-opacity-50 bg-opacity-25">
                 <nav className="px-12 py-5">
-                    <Image src="/images/logo.png" alt="logo" height={48} width={200} className='object-contain' />
+                    <Image src="/images/logo.png" alt="logo" height={48} width={200} className='object-contain' priority/>
                 </nav>
 
 
